@@ -89,6 +89,10 @@
       <Project>{A8F416B1-2901-41FF-8198-901E9AD831C5}</Project>
       <Name>CellActor.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameOfLifeModel\GameOfLifeModel.csproj">
+      <Project>{adde7487-10cc-427b-857e-44110d564e97}</Project>
+      <Name>GameOfLifeModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.ServiceFabric.Actors.2.0.217\build\Microsoft.ServiceFabric.Actors.targets" Condition="Exists('..\packages\Microsoft.ServiceFabric.Actors.2.0.217\build\Microsoft.ServiceFabric.Actors.targets')" />

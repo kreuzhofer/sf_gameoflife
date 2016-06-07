@@ -7,6 +7,8 @@ using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
 using Microsoft.ServiceFabric.Actors.Client;
 using CellActor.Interfaces;
+using GameOfLifeModel;
+
 
 namespace CellActor
 {
@@ -21,6 +23,8 @@ namespace CellActor
     [StatePersistence(StatePersistence.Persisted)]
     internal class CellActor : Actor, ICellActor
     {
+        public Cell ActorCell { get; set; }
+
         /// <summary>
         /// This method is called whenever an actor is activated.
         /// An actor is activated the first time any of its methods are invoked.
@@ -56,6 +60,19 @@ namespace CellActor
             // Requests are not guaranteed to be processed in order nor at most once.
             // The update function here verifies that the incoming count is greater than the current count to preserve order.
             return this.StateManager.AddOrUpdateStateAsync("count", count, (key, value) => count > value ? count : value);
+        }
+
+        /// <summary>
+        /// Logs the actor state to some kind of queue. To be implemented sometime in the future.
+        /// </summary>
+        public void LogStatus()
+        {
+            // Log the status for this actor
+        }
+
+        public CellState GetCellStatus()
+        {
+            return ActorCell.State;
         }
     }
 }
