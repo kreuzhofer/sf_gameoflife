@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "SFGameOfLife", "SFGameOfLife\SFGameOfLife.sfproj", "{77AE5D46-FC4E-44C1-92EA-021C1F64ADB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellActor", "CellActor\CellActor.csproj", "{E0EE7794-649B-4A38-A424-344DB76757D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellActor.Interfaces", "CellActor.Interfaces\CellActor.Interfaces.csproj", "{A8F416B1-2901-41FF-8198-901E9AD831C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77AE5D46-FC4E-44C1-92EA-021C1F64ADB2}.Debug|x64.ActiveCfg = Debug|x64
+		{77AE5D46-FC4E-44C1-92EA-021C1F64ADB2}.Debug|x64.Build.0 = Debug|x64
+		{77AE5D46-FC4E-44C1-92EA-021C1F64ADB2}.Debug|x64.Deploy.0 = Debug|x64
+		{77AE5D46-FC4E-44C1-92EA-021C1F64ADB2}.Release|x64.ActiveCfg = Release|x64
+		{77AE5D46-FC4E-44C1-92EA-021C1F64ADB2}.Release|x64.Build.0 = Release|x64
+		{77AE5D46-FC4E-44C1-92EA-021C1F64ADB2}.Release|x64.Deploy.0 = Release|x64
+		{E0EE7794-649B-4A38-A424-344DB76757D0}.Debug|x64.ActiveCfg = Debug|x64
+		{E0EE7794-649B-4A38-A424-344DB76757D0}.Debug|x64.Build.0 = Debug|x64
+		{E0EE7794-649B-4A38-A424-344DB76757D0}.Release|x64.ActiveCfg = Release|x64
+		{E0EE7794-649B-4A38-A424-344DB76757D0}.Release|x64.Build.0 = Release|x64
+		{A8F416B1-2901-41FF-8198-901E9AD831C5}.Debug|x64.ActiveCfg = Debug|x64
+		{A8F416B1-2901-41FF-8198-901E9AD831C5}.Debug|x64.Build.0 = Debug|x64
+		{A8F416B1-2901-41FF-8198-901E9AD831C5}.Release|x64.ActiveCfg = Release|x64
+		{A8F416B1-2901-41FF-8198-901E9AD831C5}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
