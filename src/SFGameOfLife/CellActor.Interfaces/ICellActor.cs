@@ -25,5 +25,13 @@ namespace CellActor.Interfaces
         /// <param name="count"></param>
         /// <returns></returns>
         Task SetCountAsync(int count);
+
+        Task GetAlive(int x, int y);
+
+        Task NeighbourAlive(int x, int y);
+
+        Task NeighbourDied(int x, int y);
+
+
     }
 }
