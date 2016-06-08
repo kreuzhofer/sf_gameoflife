@@ -10,18 +10,23 @@ namespace GameOfLifeModel
     [DataContract]
     public class Cell
     {
+        //State of the cell [PreAlive, Life, Dead]
         [DataMember]
         public CellState State { get; set; }
 
+        //Counts all bordering cell with state == alive
         [DataMember]
         public int AliveNeighbourCounter { get; set; }
 
+        //X-Coordinate of this Cell
         [DataMember]
         public int X { get; set; }
 
+        //Y-Coordinate of this Cell
         [DataMember]
         public int Y { get; set; }
 
+        //Gets all coordinates of all bordering cells
         public KeyValuePair<int, int>[] GetNeighbourCoords()
         {
             List<KeyValuePair<int, int>> result = new List<KeyValuePair<int, int>>();
