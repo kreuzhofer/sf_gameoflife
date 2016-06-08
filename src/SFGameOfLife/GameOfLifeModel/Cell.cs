@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GameOfLifeModel
 {
+    [DataContract]
     public class Cell
     {
+        [DataMember]
         public CellState State { get; set; }
+
+        [DataMember]
         public int AliveNeighbourCounter { get; set; }
+
+        [DataMember]
         public int X { get; set; }
+
+        [DataMember]
         public int Y { get; set; }
 
         public KeyValuePair<int, int>[] GetNeighbourCoords()
