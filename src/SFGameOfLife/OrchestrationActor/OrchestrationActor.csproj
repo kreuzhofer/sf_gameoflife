@@ -85,6 +85,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CellActor.Interfaces\CellActor.Interfaces.csproj">
+      <Project>{A8F416B1-2901-41FF-8198-901E9AD831C5}</Project>
+      <Name>CellActor.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameOfLifeModel\GameOfLifeModel.csproj">
       <Project>{adde7487-10cc-427b-857e-44110d564e97}</Project>
       <Name>GameOfLifeModel</Name>

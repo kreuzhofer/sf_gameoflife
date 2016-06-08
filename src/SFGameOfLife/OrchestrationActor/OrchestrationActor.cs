@@ -8,6 +8,8 @@ using Microsoft.ServiceFabric.Actors.Runtime;
 using Microsoft.ServiceFabric.Actors.Client;
 using OrchestrationActor.Interfaces;
 using GameOfLifeModel;
+using CellActor.Interfaces;
+using CellActor;
 
 namespace OrchestrationActor
 {
@@ -27,7 +29,31 @@ namespace OrchestrationActor
 
         public Task BigBang()
         {
-            throw new NotImplementedException();
+            return new Task(() =>
+            {
+                Random random = new Random(DateTime.Now.Millisecond);
+
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        CreateCellActor($"cell_{i}_{j}", (CellState)random.Next(0, 2));
+                    }
+                }
+            });
+        }
+
+        private Task CreateCellActor(string cellId, CellState cellState)
+        {
+            // Create a randomly distributed actor ID
+            ActorId actorId = new ActorId(cellId);
+
+            // This only creates a proxy object, it does not activate an actor or invoke any methods yet.
+            ICellActor cellActor = ActorProxy.Create<ICellActor>(actorId, new Uri("fabric:/SFGameOfLife/CellActorService"));
+
+            // This will invoke a method on the actor. If an actor with the given ID does not exist, it will be activated by this method call.
+            // TODO: Use Alive function using cellState
+            return cellActor.GetCountAsync();
         }
 
         public Task SetCellState(Cell cell)
