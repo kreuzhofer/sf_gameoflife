@@ -72,7 +72,7 @@ namespace CellActor
             Debug.WriteLine("cell_{0}_{1}: {2} nc:{3}", ActorCell.X, ActorCell.Y, ActorCell.State, ActorCell.AliveNeighbourCounter);
 
             var id = new ActorId(String.Format("god"));
-            var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(id, new Uri("fabric:/SFGameOfLife/OrchestrationActorService"));
+            var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(id, new Uri("fabric:/SFGameOfLife"));
             var task = orchestrationActor.SetCellState(ActorCell);
         }
 
@@ -107,7 +107,7 @@ namespace CellActor
             foreach (var coord in neighbourcoords)
             {
                 var id = new ActorId(String.Format("cell_{0}_{1}", coord.Key, coord.Value));
-                var neighbourcell = ActorProxy.Create<ICellActor>(id, new Uri("fabric:/SFGameOfLife/CellActorService"));
+                var neighbourcell = ActorProxy.Create<ICellActor>(id, new Uri("fabric:/SFGameOfLife"));
                 await neighbourcell.NeighbourStateChanged(coord.Key, coord.Value, state);
             }
         }
@@ -136,7 +136,7 @@ namespace CellActor
                     ActorCell.AliveNeighbourCounter--;
             }
 
-            //Check rules and AliveNeighbourCounter
+            //Check rules and update the state if necessary => notify neighbours if state changed
             if (ActorCell.State == CellState.PreAlive &&
                 ActorCell.AliveNeighbourCounter >= Rules.AliveNeighboursForNewLife)
             {
@@ -156,7 +156,7 @@ namespace CellActor
             if (ActorCell.State == CellState.Dead)
             {
                 var id = new ActorId(String.Format("cell_{0}_{1}", ActorCell.X, ActorCell.Y));
-                var cellActorService = ActorServiceProxy.Create(new Uri("fabric:/SFGameOfLife/CellActorService"), id);
+                var cellActorService = ActorServiceProxy.Create(new Uri("fabric:/SFGameOfLife"), id);
                 var task = cellActorService.DeleteActorAsync(id, CancellationToken.None);
             }
             else
