@@ -7,6 +7,9 @@ using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
 using Microsoft.ServiceFabric.Actors.Client;
 using OrchestrationActor.Interfaces;
+using GameOfLifeModel;
+using CellActor.Interfaces;
+using CellActor;
 
 namespace OrchestrationActor
 {
@@ -21,6 +24,52 @@ namespace OrchestrationActor
     [StatePersistence(StatePersistence.Persisted)]
     internal class OrchestrationActor : Actor, IOrchestrationActor
     {
+
+        private List<Cell> cells;
+
+        public Task BigBang()
+        {
+            return new Task(() =>
+            {
+                Random random = new Random(DateTime.Now.Millisecond);
+
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        CreateCellActor($"cell_{i}_{j}", (CellState)random.Next(0, 2));
+                    }
+                }
+            });
+        }
+
+        private Task CreateCellActor(string cellId, CellState cellState)
+        {
+            // Create a randomly distributed actor ID
+            ActorId actorId = new ActorId(cellId);
+
+            // This only creates a proxy object, it does not activate an actor or invoke any methods yet.
+            ICellActor cellActor = ActorProxy.Create<ICellActor>(actorId, new Uri("fabric:/SFGameOfLife/CellActorService"));
+
+            // This will invoke a method on the actor. If an actor with the given ID does not exist, it will be activated by this method call.
+            // TODO: Use Alive function using cellState
+            return cellActor.GetCountAsync();
+        }
+
+        public Task SetCellState(Cell cell)
+        {
+            return new Task(() =>
+            {
+                // Search list for given cell.
+                //cells.Where<Cell>(x => x.
+                // TODO: If found, update cell.
+
+                // If not found add cell update to list.
+
+                cells.Add(cell);
+            });
+        }
+
         /// <summary>
         /// This method is called whenever an actor is activated.
         /// An actor is activated the first time any of its methods are invoked.
@@ -57,5 +106,7 @@ namespace OrchestrationActor
             // The update function here verifies that the incoming count is greater than the current count to preserve order.
             return this.StateManager.AddOrUpdateStateAsync("count", count, (key, value) => count > value ? count : value);
         }
+
+
     }
 }
