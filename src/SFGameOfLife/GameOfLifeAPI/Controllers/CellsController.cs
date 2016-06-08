@@ -25,6 +25,9 @@ namespace GameOfLifeAPI.Controllers
             //    var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(new ActorId("god"), "fabric:/SFGameOfLife");
             //};
 
+
+
+
             var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(new ActorId("god"), "fabric:/SFGameOfLife");
             return await orchestrationActor.GetCellStates();
     }

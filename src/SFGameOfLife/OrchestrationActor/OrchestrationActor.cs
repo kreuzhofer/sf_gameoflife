@@ -38,7 +38,6 @@ namespace OrchestrationActor
                         await CreateCellActor(i, j, (CellState)random.Next(0, 2));
                     }
                 }
-      
         }
 
         private Task CreateCellActor(int x, int y, CellState cellState)
