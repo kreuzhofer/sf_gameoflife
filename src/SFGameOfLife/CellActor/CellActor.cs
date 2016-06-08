@@ -77,12 +77,19 @@ namespace CellActor
 
         public async Task GetAlive(int x, int y)
         {
-            ActorCell = new Cell
+            if (ActorCell == null)
             {
-                State = CellState.Alive,
-                X = x,
-                Y = y
-            };
+                ActorCell = new Cell
+                {
+                    State = CellState.Alive,
+                    X = x,
+                    Y = y
+                };
+            }
+            else
+            {
+                ActorCell.State = CellState.Alive;
+            }
             await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
 
             await NotifyNeighboursAsync(CellState.Alive);
@@ -101,7 +108,8 @@ namespace CellActor
 
         public async Task NeighbourStateChanged(int x, int y, CellState newstate)
         {
-            if (ActorCell == null) // cell was dead
+            //Cell was dead: create a new one in Prelive State
+            if (ActorCell == null)
             {
                 ActorCell = new Cell
                 {
@@ -111,6 +119,7 @@ namespace CellActor
                 };
             }
 
+            //Update AliveNeighbourCounter
             if (newstate == CellState.Alive)
             {
                 ActorCell.AliveNeighbourCounter++;
@@ -121,6 +130,7 @@ namespace CellActor
                     ActorCell.AliveNeighbourCounter--;
             }
 
+            //Check rules and AliveNeighbourCounter
             if (ActorCell.State == CellState.PreAlive &&
                 ActorCell.AliveNeighbourCounter >= Rules.AliveNeighboursForNewLife)
             {
