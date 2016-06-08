@@ -108,7 +108,15 @@ namespace CellActor
             {
                 var id = new ActorId(String.Format("cell_{0}_{1}", coord.Key, coord.Value));
                 var neighbourcell = ActorProxy.Create<ICellActor>(id, new Uri("fabric:/SFGameOfLife/CellActorService"));
-                await neighbourcell.NeighbourStateChanged(coord.Key, coord.Value, state, getAliveCall);
+                try
+                {
+                    await neighbourcell.NeighbourStateChanged(coord.Key, coord.Value, state, getAliveCall);
+
+                }
+                catch (Exception)
+                {
+                    // cyclic calls are not allowed
+                }
             }
         }
 
