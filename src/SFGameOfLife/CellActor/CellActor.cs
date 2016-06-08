@@ -102,7 +102,7 @@ namespace CellActor
             foreach (var coord in neighbourcoords)
             {
                 var id = new ActorId(String.Format("cell_{0}_{1}", coord.Key, coord.Value));
-                var neighbourcell = ActorProxy.Create<ICellActor>(id, new Uri("fabric:/MyApp/CellActorService"));
+                var neighbourcell = ActorProxy.Create<ICellActor>(id, new Uri("fabric:/SFGameOfLife/CellActorService"));
                 await neighbourcell.NeighbourStateChanged(coord.Key, coord.Value, state);
             }
         }
@@ -150,7 +150,7 @@ namespace CellActor
             if (ActorCell.State == CellState.Dead)
             {
                 var id = new ActorId(String.Format("cell_{0}_{1}", ActorCell.X, ActorCell.Y));
-                var cellActorService = ActorServiceProxy.Create(new Uri("fabric:/MyApp/CellActorService"), id);
+                var cellActorService = ActorServiceProxy.Create(new Uri("fabric:/SFGameOfLife/CellActorService"), id);
                 var task = cellActorService.DeleteActorAsync(id, CancellationToken.None);
             }
             else
