@@ -74,6 +74,10 @@ namespace OrchestrationActor
             });
         }
 
+        public async Task<List<Cell>> GetCellStates() {
+            return cells;
+        }
+
         /// <summary>
         /// This method is called whenever an actor is activated.
         /// An actor is activated the first time any of its methods are invoked.
