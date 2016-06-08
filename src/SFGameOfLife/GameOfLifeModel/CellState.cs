@@ -8,6 +8,8 @@ namespace GameOfLifeModel
 {
     public enum CellState
     {
-        Alive = 0, Dead = 1
+        PreAlive = 0,
+        Alive = 1,
+        Dead = 2
     }
 }
