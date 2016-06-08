@@ -37,23 +37,22 @@ namespace OrchestrationActor
                 {
                     for (int j = 0; j < 3; j++)
                     {
-                        CreateCellActor($"cell_{i}_{j}", (CellState)random.Next(0, 2));
+                        CreateCellActor(i, j, (CellState)random.Next(0, 2));
                     }
                 }
             });
         }
 
-        private Task CreateCellActor(string cellId, CellState cellState)
+        private Task CreateCellActor(int x, int y, CellState cellState)
         {
             // Create a randomly distributed actor ID
-            ActorId actorId = new ActorId(cellId);
+            ActorId actorId = new ActorId($"cell_{x}_{y}");
 
             // This only creates a proxy object, it does not activate an actor or invoke any methods yet.
             ICellActor cellActor = ActorProxy.Create<ICellActor>(actorId, new Uri("fabric:/SFGameOfLife/CellActorService"));
 
             // This will invoke a method on the actor. If an actor with the given ID does not exist, it will be activated by this method call.
-            // TODO: Use Alive function using cellState
-            return cellActor.GetCountAsync();
+            return cellActor.GetAlive(x, y);
         }
 
         public Task SetCellState(Cell cell)
@@ -61,12 +60,17 @@ namespace OrchestrationActor
             return new Task(() =>
             {
                 // Search list for given cell.
-                //cells.Where<Cell>(x => x.
-                // TODO: If found, update cell.
+                var cellToUpdate = cells.FirstOrDefault<Cell>(i => i.X == cell.X && i.Y == cell.Y);
 
-                // If not found add cell update to list.
-
-                cells.Add(cell);
+                if (cellToUpdate != null)
+                {
+                    cellToUpdate.State = cell.State;
+                }
+                else
+                {
+                    // If not found add cell update to list.
+                    cells.Add(cell);
+                }
             });
         }
 
