@@ -52,7 +52,6 @@ namespace OrchestrationActor
             ICellActor cellActor = ActorProxy.Create<ICellActor>(actorId, new Uri("fabric:/SFGameOfLife/CellActorService"));
 
             // This will invoke a method on the actor. If an actor with the given ID does not exist, it will be activated by this method call.
-            // TODO: Use Alive function using cellState
             return cellActor.GetAlive(x, y);
         }
 
