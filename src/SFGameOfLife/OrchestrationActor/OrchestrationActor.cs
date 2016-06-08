@@ -25,7 +25,7 @@ namespace OrchestrationActor
     internal class OrchestrationActor : Actor, IOrchestrationActor
     {
 
-        private List<Cell> cells = new List<Cell>;
+        private List<Cell> cells = new List<Cell>();
 
         public Task BigBang()
         {
