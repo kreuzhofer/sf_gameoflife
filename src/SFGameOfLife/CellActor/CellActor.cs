@@ -8,7 +8,7 @@ using Microsoft.ServiceFabric.Actors.Runtime;
 using Microsoft.ServiceFabric.Actors.Client;
 using CellActor.Interfaces;
 using GameOfLifeModel;
-
+using System.Diagnostics;
 
 namespace CellActor
 {
@@ -68,6 +68,7 @@ namespace CellActor
         public void LogStatus()
         {
             // Log the status for this actor
+            Debug.WriteLine("cell_{0}_{1}: {2} nc:{3}", ActorCell.X, ActorCell.Y, ActorCell.State, ActorCell.AliveNeighbourCounter);
         }
 
         public CellState GetCellStatus()
@@ -91,8 +92,8 @@ namespace CellActor
                 ActorCell.State = CellState.Alive;
             }
             await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
-
             await NotifyNeighboursAsync(CellState.Alive);
+            LogStatus();
         }
 
         private async Task NotifyNeighboursAsync(CellState state)
@@ -156,6 +157,7 @@ namespace CellActor
             {
                 await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
             }
+            LogStatus();
         }
     }
 }
