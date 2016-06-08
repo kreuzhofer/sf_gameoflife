@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="SFGameOfLifeType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
    <Parameters>
+      <Parameter Name="GameOfLifeAPI_InstanceCount" DefaultValue="-1" />
       <Parameter Name="CellActorService_PartitionCount" DefaultValue="10" />
       <Parameter Name="CellActorService_MinReplicaSetSize" DefaultValue="2" />
       <Parameter Name="CellActorService_TargetReplicaSetSize" DefaultValue="3" />
@@ -9,12 +10,21 @@
       <Parameter Name="OrchestrationActorService_TargetReplicaSetSize" DefaultValue="3" />
    </Parameters>
    <ServiceManifestImport>
+      <ServiceManifestRef ServiceManifestName="GameOfLifeAPIPkg" ServiceManifestVersion="1.0.0" />
+      <ConfigOverrides />
+   </ServiceManifestImport>
+   <ServiceManifestImport>
       <ServiceManifestRef ServiceManifestName="OrchestrationActorPkg" ServiceManifestVersion="1.0.0" />
    </ServiceManifestImport>
    <ServiceManifestImport>
       <ServiceManifestRef ServiceManifestName="CellActorPkg" ServiceManifestVersion="1.0.0" />
    </ServiceManifestImport>
    <DefaultServices>
+      <Service Name="GameOfLifeAPI">
+         <StatelessService ServiceTypeName="GameOfLifeAPIType" InstanceCount="[GameOfLifeAPI_InstanceCount]">
+            <SingletonPartition />
+         </StatelessService>
+      </Service>
       <Service Name="CellActorService" GeneratedIdRef="2b8ef8c3-f4f3-4abb-a781-4bd431b0fb6f|Persisted">
          <StatefulService ServiceTypeName="CellActorServiceType" TargetReplicaSetSize="[CellActorService_TargetReplicaSetSize]" MinReplicaSetSize="[CellActorService_MinReplicaSetSize]">
             <UniformInt64Partition PartitionCount="[CellActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
