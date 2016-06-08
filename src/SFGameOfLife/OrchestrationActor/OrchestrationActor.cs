@@ -49,7 +49,7 @@ namespace OrchestrationActor
             ActorId actorId = new ActorId($"cell_{x}_{y}");
 
             // This only creates a proxy object, it does not activate an actor or invoke any methods yet.
-            ICellActor cellActor = ActorProxy.Create<ICellActor>(actorId, new Uri("fabric:/SFGameOfLife/CellActorService"));
+            ICellActor cellActor = ActorProxy.Create<ICellActor>(actorId, new Uri("fabric:/SFGameOfLife"));
 
             // This will invoke a method on the actor. If an actor with the given ID does not exist, it will be activated by this method call.
             return cellActor.GetAlive(x, y);
