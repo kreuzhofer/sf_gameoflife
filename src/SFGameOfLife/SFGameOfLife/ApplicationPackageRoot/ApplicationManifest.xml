@@ -4,7 +4,13 @@
       <Parameter Name="CellActorService_PartitionCount" DefaultValue="10" />
       <Parameter Name="CellActorService_MinReplicaSetSize" DefaultValue="2" />
       <Parameter Name="CellActorService_TargetReplicaSetSize" DefaultValue="3" />
+      <Parameter Name="OrchestrationActorService_PartitionCount" DefaultValue="10" />
+      <Parameter Name="OrchestrationActorService_MinReplicaSetSize" DefaultValue="2" />
+      <Parameter Name="OrchestrationActorService_TargetReplicaSetSize" DefaultValue="3" />
    </Parameters>
+   <ServiceManifestImport>
+      <ServiceManifestRef ServiceManifestName="OrchestrationActorPkg" ServiceManifestVersion="1.0.0" />
+   </ServiceManifestImport>
    <ServiceManifestImport>
       <ServiceManifestRef ServiceManifestName="CellActorPkg" ServiceManifestVersion="1.0.0" />
    </ServiceManifestImport>
@@ -12,6 +18,11 @@
       <Service Name="CellActorService" GeneratedIdRef="2b8ef8c3-f4f3-4abb-a781-4bd431b0fb6f|Persisted">
          <StatefulService ServiceTypeName="CellActorServiceType" TargetReplicaSetSize="[CellActorService_TargetReplicaSetSize]" MinReplicaSetSize="[CellActorService_MinReplicaSetSize]">
             <UniformInt64Partition PartitionCount="[CellActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+         </StatefulService>
+      </Service>
+      <Service Name="OrchestrationActorService" GeneratedIdRef="48c972fa-898b-4500-b56f-a78baddf1315|Persisted">
+         <StatefulService ServiceTypeName="OrchestrationActorServiceType" TargetReplicaSetSize="[OrchestrationActorService_TargetReplicaSetSize]" MinReplicaSetSize="[OrchestrationActorService_MinReplicaSetSize]">
+            <UniformInt64Partition PartitionCount="[OrchestrationActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
          </StatefulService>
       </Service>
    </DefaultServices>
