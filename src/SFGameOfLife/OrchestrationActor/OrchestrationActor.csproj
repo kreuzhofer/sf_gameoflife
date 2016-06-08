@@ -1,18 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <ProjectGuid>{A8F416B1-2901-41FF-8198-901E9AD831C5}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{4E9ADC79-94B4-4405-B192-16E305FE7CC7}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CellActor.Interfaces</RootNamespace>
-    <AssemblyName>CellActor.Interfaces</AssemblyName>
+    <RootNamespace>OrchestrationActor</RootNamespace>
+    <AssemblyName>OrchestrationActor</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup>
+    <UpdateServiceFabricManifestEnabled>true</UpdateServiceFabricManifestEnabled>
+    <ServicePackagePath>PackageRoot</ServicePackagePath>
+    <ServicePackagePrefix>$(MSBuildProjectName)</ServicePackagePrefix>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,15 +74,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ICellActor.cs" />
+    <Compile Include="OrchestrationActor.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ActorEventSource.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="PackageRoot\ServiceManifest.xml" />
+    <None Include="PackageRoot\Config\Settings.xml" />
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GameOfLifeModel\GameOfLifeModel.csproj">
-      <Project>{ADDE7487-10CC-427B-857E-44110D564E97}</Project>
-      <Name>GameOfLifeModel</Name>
+    <ProjectReference Include="..\OrchestrationActor.Interfaces\OrchestrationActor.Interfaces.csproj">
+      <Project>{59BB702C-B796-4378-8178-B9D37F708674}</Project>
+      <Name>OrchestrationActor.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

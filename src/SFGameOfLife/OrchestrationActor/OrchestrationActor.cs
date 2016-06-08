@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
 using Microsoft.ServiceFabric.Actors.Client;
-using CellActor.Interfaces;
-using GameOfLifeModel;
+using OrchestrationActor.Interfaces;
 
-
-namespace CellActor
+namespace OrchestrationActor
 {
     /// <remarks>
     /// This class represents an actor.
@@ -21,10 +19,8 @@ namespace CellActor
     ///  - None: State is kept in memory only and not replicated.
     /// </remarks>
     [StatePersistence(StatePersistence.Persisted)]
-    internal class CellActor : Actor, ICellActor
+    internal class OrchestrationActor : Actor, IOrchestrationActor
     {
-        public Cell ActorCell { get; set; }
-
         /// <summary>
         /// This method is called whenever an actor is activated.
         /// An actor is activated the first time any of its methods are invoked.
@@ -45,7 +41,7 @@ namespace CellActor
         /// TODO: Replace with your own actor method.
         /// </summary>
         /// <returns></returns>
-        Task<int> ICellActor.GetCountAsync()
+        Task<int> IOrchestrationActor.GetCountAsync()
         {
             return this.StateManager.GetStateAsync<int>("count");
         }
@@ -55,12 +51,11 @@ namespace CellActor
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        Task ICellActor.SetCountAsync(int count)
+        Task IOrchestrationActor.SetCountAsync(int count)
         {
             // Requests are not guaranteed to be processed in order nor at most once.
             // The update function here verifies that the incoming count is greater than the current count to preserve order.
             return this.StateManager.AddOrUpdateStateAsync("count", count, (key, value) => count > value ? count : value);
         }
-
     }
 }

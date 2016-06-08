@@ -2,5 +2,6 @@
 <Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/SFGameOfLife" xmlns="http://schemas.microsoft.com/2011/01/fabric">
    <Parameters>
       <Parameter Name="CellActorService_PartitionCount" Value="1" />
+      <Parameter Name="OrchestrationActorService_PartitionCount" Value="1" />
    </Parameters>
 </Application>
