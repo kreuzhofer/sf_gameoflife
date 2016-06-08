@@ -36,6 +36,7 @@ namespace CellActor.Interfaces
         /// <param name="y">The Y-Coordinate of the cell that gets alive.</param>
         Task GetAlive(int x, int y);
 
+
         /// <summary>
         /// If the state of a cell changes (e.g. from PreAlive->Life, Life->Dead) then all bordering
         /// cells are informed. 
@@ -51,6 +52,6 @@ namespace CellActor.Interfaces
         /// <param name="y">The Y-Coordinate of the cell that state got changed. </param>
         /// <param name="newstate">The new state of the cell. </param>
         /// <returns></returns>
-        Task NeighbourStateChanged(int x, int y, CellState newstate);
+        Task NeighbourStateChanged(int x, int y, CellState newstate, bool getAliveCall);
     }
 }

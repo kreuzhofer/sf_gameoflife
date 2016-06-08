@@ -97,22 +97,22 @@ namespace CellActor
                 ActorCell.State = CellState.Alive;
             }
             await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
-            await NotifyNeighboursAsync(CellState.Alive);
+            await NotifyNeighboursAsync(CellState.Alive, true);
             LogStatus();
         }
 
-        private async Task NotifyNeighboursAsync(CellState state)
+        private async Task NotifyNeighboursAsync(CellState state, bool getAliveCall)
         {
             var neighbourcoords = ActorCell.GetNeighbourCoords();
             foreach (var coord in neighbourcoords)
             {
                 var id = new ActorId(String.Format("cell_{0}_{1}", coord.Key, coord.Value));
                 var neighbourcell = ActorProxy.Create<ICellActor>(id, new Uri("fabric:/SFGameOfLife"));
-                await neighbourcell.NeighbourStateChanged(coord.Key, coord.Value, state);
+                await neighbourcell.NeighbourStateChanged(coord.Key, coord.Value, state, getAliveCall);
             }
         }
 
-        public async Task NeighbourStateChanged(int x, int y, CellState newstate)
+        public async Task NeighbourStateChanged(int x, int y, CellState newstate, bool getAliveCall)
         {
             //Cell was dead: create a new one in Prelive State
             if (ActorCell == null)
@@ -141,15 +141,15 @@ namespace CellActor
                 ActorCell.AliveNeighbourCounter >= Rules.AliveNeighboursForNewLife)
             {
                 ActorCell.State = CellState.Alive;
-                await NotifyNeighboursAsync(ActorCell.State);
+                await NotifyNeighboursAsync(ActorCell.State, false);
             }
-            if (ActorCell.State == CellState.Alive)
+            if (ActorCell.State == CellState.Alive && !getAliveCall)
             {
                 if (ActorCell.AliveNeighbourCounter >= Rules.UpperAliveNeighboursForDeath ||
                     ActorCell.AliveNeighbourCounter <= Rules.LowerAliveNeighboursForDeath)
                 {
                     ActorCell.State = CellState.Dead;
-                    await NotifyNeighboursAsync(ActorCell.State);
+                    await NotifyNeighboursAsync(ActorCell.State, false);
                 }
             }
             LogStatus();
@@ -163,7 +163,6 @@ namespace CellActor
             {
                 await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
             }
-            
         }
     }
 }
