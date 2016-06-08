@@ -34,7 +34,7 @@ namespace GameOfLifeAPI.Controllers
         {
             var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(new ActorId("god"), "fabric:/SFGameOfLife");
 
-            orchestrationActor.BigBang();
+            await orchestrationActor.BigBang();
 
         }
 

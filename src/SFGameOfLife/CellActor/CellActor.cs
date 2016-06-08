@@ -72,7 +72,7 @@ namespace CellActor
             Debug.WriteLine("cell_{0}_{1}: {2} nc:{3}", ActorCell.X, ActorCell.Y, ActorCell.State, ActorCell.AliveNeighbourCounter);
 
             var id = new ActorId(String.Format("god"));
-            var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(id, new Uri("fabric:/SFGameOfLife"));
+            var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(id, new Uri("fabric:/SFGameOfLife/OrchestrationActorService"));
             var task = orchestrationActor.SetCellState(ActorCell);
         }
 
@@ -107,7 +107,7 @@ namespace CellActor
             foreach (var coord in neighbourcoords)
             {
                 var id = new ActorId(String.Format("cell_{0}_{1}", coord.Key, coord.Value));
-                var neighbourcell = ActorProxy.Create<ICellActor>(id, new Uri("fabric:/SFGameOfLife"));
+                var neighbourcell = ActorProxy.Create<ICellActor>(id, new Uri("fabric:/SFGameOfLife/CellActorService"));
                 await neighbourcell.NeighbourStateChanged(coord.Key, coord.Value, state, getAliveCall);
             }
         }
@@ -157,7 +157,7 @@ namespace CellActor
             if (ActorCell.State == CellState.Dead)
             {
                 var id = new ActorId(String.Format("cell_{0}_{1}", ActorCell.X, ActorCell.Y));
-                var cellActorService = ActorServiceProxy.Create(new Uri("fabric:/SFGameOfLife"), id);
+                var cellActorService = ActorServiceProxy.Create(new Uri("fabric:/SFGameOfLife/CellActorService"), id);
                 var task = cellActorService.DeleteActorAsync(id, CancellationToken.None);
             }
             else
