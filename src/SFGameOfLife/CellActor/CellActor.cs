@@ -23,7 +23,7 @@ namespace CellActor
     [StatePersistence(StatePersistence.Persisted)]
     internal class CellActor : Actor, ICellActor
     {
-        public Cell ActorCell { get; set; }
+        private Cell ActorCell { get; set; }
 
         /// <summary>
         /// This method is called whenever an actor is activated.
@@ -62,5 +62,65 @@ namespace CellActor
             return this.StateManager.AddOrUpdateStateAsync("count", count, (key, value) => count > value ? count : value);
         }
 
+        /// <summary>
+        /// Logs the actor state to some kind of queue. To be implemented sometime in the future.
+        /// </summary>
+        public void LogStatus()
+        {
+            // Log the status for this actor
+        }
+
+        public CellState GetCellStatus()
+        {
+            return ActorCell.State;
+        }
+
+        public async Task GetAlive(int x, int y)
+        {
+            ActorCell = new Cell
+            {
+                State = CellState.Alive,
+                X = x,
+                Y = y
+            };
+            await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
+
+            var neighbourcoords = ActorCell.GetNeighbourCoords();
+            foreach (var coord in neighbourcoords)
+            {
+                var id = new ActorId(String.Format("cell_{0}_{1}", coord.Key, coord.Value));
+                var neighbourcell = ActorProxy.Create<ICellActor>(id, new Uri("fabric:/MyApp/CellActorService"));
+                await neighbourcell.NeighbourAlive(ActorCell.X, ActorCell.Y);
+            }
+        }
+
+        public async Task NeighbourAlive(int x, int y)
+        {
+            if(ActorCell == null) // cell was dead
+            {
+                ActorCell = new Cell
+                {
+                    State = CellState.PreAlive,
+                    AliveNeighbourCounter = 1,
+                    X = x,
+                    Y = y
+                };
+
+            }
+            else
+            {
+                ActorCell.AliveNeighbourCounter++;
+                if(ActorCell.State == CellState.PreAlive && ActorCell.AliveNeighbourCounter>=Rules.MinAliveNeighboursForNewLife)
+                {
+                    ActorCell.State = CellState.Alive;
+                }
+            }
+            await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
+        }
+
+        public Task NeighbourDied(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

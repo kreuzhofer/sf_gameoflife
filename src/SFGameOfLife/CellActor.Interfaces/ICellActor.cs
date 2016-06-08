@@ -27,17 +27,12 @@ namespace CellActor.Interfaces
         /// <returns></returns>
         Task SetCountAsync(int count);
 
+        Task GetAlive(int x, int y);
 
-        /// <summary>
-        /// Logs the actor state to some kind of queue. To be implemented sometime in the future.
-        /// </summary>
-        //Task LogStatus();
+        Task NeighbourAlive(int x, int y);
 
-        /// <summary>
-        /// Returns the state of the cell
-        /// </summary>
-        /// <returns></returns>
-        //Task<CellState> GetCellStatus();
+        Task NeighbourDied(int x, int y);
+
 
     }
 }
