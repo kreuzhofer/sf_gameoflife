@@ -51,6 +51,8 @@ namespace CellActor.Interfaces
         /// <param name="x">The X-Coordinate of the cell that state got changed. </param>
         /// <param name="y">The Y-Coordinate of the cell that state got changed. </param>
         /// <param name="newstate">The new state of the cell. </param>
+        /// <param name="getAliveCall">True: this method is called from a cell that was spawened via getAlive().
+        ///                            False: this method is called from a cell that changed it's state. </param>
         /// <returns></returns>
         Task NeighbourStateChanged(int x, int y, CellState newstate, bool getAliveCall);
     }

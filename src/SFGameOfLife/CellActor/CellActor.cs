@@ -143,6 +143,7 @@ namespace CellActor
                 ActorCell.State = CellState.Alive;
                 await NotifyNeighboursAsync(ActorCell.State, false);
             }
+            //Cell can only die if this method is not called from a cell that was created via getAlive()
             if (ActorCell.State == CellState.Alive && !getAliveCall)
             {
                 if (ActorCell.AliveNeighbourCounter >= Rules.UpperAliveNeighboursForDeath ||
