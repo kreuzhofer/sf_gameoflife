@@ -38,5 +38,7 @@ namespace OrchestrationActor.Interfaces
         /// </summary>
         /// <returns></returns>
         Task BigBang();
+
+        Task<List<Cell>> GetCellStates();
     }
 }
