@@ -8,7 +8,8 @@ namespace GameOfLifeModel
 {
     public static class Rules
     {
-        public const int MinAliveNeighboursForNewLife = 3;
-        public const int MaxAliveNeighboursForDeath = 5;
+        public const int AliveNeighboursForNewLife = 3;
+        public const int UpperAliveNeighboursForDeath = 4;
+        public const int LowerAliveNeighboursForDeath = 1;
     }
 }

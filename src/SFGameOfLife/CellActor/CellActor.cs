@@ -85,42 +85,67 @@ namespace CellActor
             };
             await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
 
+            await NotifyNeighboursAsync(CellState.Alive);
+        }
+
+        private async Task NotifyNeighboursAsync(CellState state)
+        {
             var neighbourcoords = ActorCell.GetNeighbourCoords();
             foreach (var coord in neighbourcoords)
             {
                 var id = new ActorId(String.Format("cell_{0}_{1}", coord.Key, coord.Value));
                 var neighbourcell = ActorProxy.Create<ICellActor>(id, new Uri("fabric:/MyApp/CellActorService"));
-                await neighbourcell.NeighbourAlive(ActorCell.X, ActorCell.Y);
+                await neighbourcell.NeighbourStateChanged(coord.Key, coord.Value, state);
             }
         }
 
-        public async Task NeighbourAlive(int x, int y)
+        public async Task NeighbourStateChanged(int x, int y, CellState newstate)
         {
-            if(ActorCell == null) // cell was dead
+            if (ActorCell == null) // cell was dead
             {
                 ActorCell = new Cell
                 {
                     State = CellState.PreAlive,
-                    AliveNeighbourCounter = 1,
                     X = x,
                     Y = y
                 };
+            }
 
+            if (newstate == CellState.Alive)
+            {
+                ActorCell.AliveNeighbourCounter++;
+            }
+            else if (newstate == CellState.Dead)
+            {
+                if (ActorCell.AliveNeighbourCounter > 0)
+                    ActorCell.AliveNeighbourCounter--;
+            }
+
+            if (ActorCell.State == CellState.PreAlive &&
+                ActorCell.AliveNeighbourCounter >= Rules.AliveNeighboursForNewLife)
+            {
+                ActorCell.State = CellState.Alive;
+                await NotifyNeighboursAsync(ActorCell.State);
+            }
+            if (ActorCell.State == CellState.Alive)
+            {
+                if (ActorCell.AliveNeighbourCounter >= Rules.UpperAliveNeighboursForDeath ||
+                    ActorCell.AliveNeighbourCounter <= Rules.LowerAliveNeighboursForDeath)
+                {
+                    ActorCell.State = CellState.Dead;
+                    await NotifyNeighboursAsync(ActorCell.State);
+                }
+            }
+            if (ActorCell.State == CellState.Dead)
+            {
+                var id = new ActorId(String.Format("cell_{0}_{1}", ActorCell.X, ActorCell.Y));
+                var cellActorService = ActorServiceProxy.Create(new Uri("fabric:/MyApp/CellActorService"), id);
+                var task = cellActorService.DeleteActorAsync(id, CancellationToken.None);
             }
             else
             {
-                ActorCell.AliveNeighbourCounter++;
-                if(ActorCell.State == CellState.PreAlive && ActorCell.AliveNeighbourCounter>=Rules.MinAliveNeighboursForNewLife)
-                {
-                    ActorCell.State = CellState.Alive;
-                }
+                await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
             }
-            await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
-        }
-
-        public Task NeighbourDied(int x, int y)
-        {
-            throw new NotImplementedException();
         }
     }
 }

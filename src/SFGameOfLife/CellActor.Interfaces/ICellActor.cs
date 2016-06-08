@@ -29,10 +29,6 @@ namespace CellActor.Interfaces
 
         Task GetAlive(int x, int y);
 
-        Task NeighbourAlive(int x, int y);
-
-        Task NeighbourDied(int x, int y);
-
-
+        Task NeighbourStateChanged(int x, int y, CellState newstate);
     }
 }
