@@ -93,6 +93,10 @@
       <Project>{adde7487-10cc-427b-857e-44110d564e97}</Project>
       <Name>GameOfLifeModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OrchestrationActor.Interfaces\OrchestrationActor.Interfaces.csproj">
+      <Project>{59BB702C-B796-4378-8178-B9D37F708674}</Project>
+      <Name>OrchestrationActor.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.ServiceFabric.Actors.2.0.217\build\Microsoft.ServiceFabric.Actors.targets" Condition="Exists('..\packages\Microsoft.ServiceFabric.Actors.2.0.217\build\Microsoft.ServiceFabric.Actors.targets')" />

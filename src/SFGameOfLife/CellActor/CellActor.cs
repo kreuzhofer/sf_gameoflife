@@ -9,6 +9,7 @@ using Microsoft.ServiceFabric.Actors.Client;
 using CellActor.Interfaces;
 using GameOfLifeModel;
 using System.Diagnostics;
+using OrchestrationActor.Interfaces;
 
 namespace CellActor
 {
@@ -63,12 +64,16 @@ namespace CellActor
         }
 
         /// <summary>
-        /// Logs the actor state to some kind of queue. To be implemented sometime in the future.
+        /// Logs the actor state to the orchestration actor.
         /// </summary>
         public void LogStatus()
         {
             // Log the status for this actor
             Debug.WriteLine("cell_{0}_{1}: {2} nc:{3}", ActorCell.X, ActorCell.Y, ActorCell.State, ActorCell.AliveNeighbourCounter);
+
+            var id = new ActorId(String.Format("god"));
+            var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(id, new Uri("fabric:/SFGameOfLife/OrchestrationActorService"));
+            var task = orchestrationActor.SetCellState(ActorCell);
         }
 
         public CellState GetCellStatus()
@@ -147,6 +152,7 @@ namespace CellActor
                     await NotifyNeighboursAsync(ActorCell.State);
                 }
             }
+            LogStatus();
             if (ActorCell.State == CellState.Dead)
             {
                 var id = new ActorId(String.Format("cell_{0}_{1}", ActorCell.X, ActorCell.Y));
@@ -157,7 +163,7 @@ namespace CellActor
             {
                 await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
             }
-            LogStatus();
+            
         }
     }
 }
