@@ -7,6 +7,7 @@ using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
 using Microsoft.ServiceFabric.Actors.Client;
 using OrchestrationActor.Interfaces;
+using GameOfLifeModel;
 
 namespace OrchestrationActor
 {
@@ -21,6 +22,28 @@ namespace OrchestrationActor
     [StatePersistence(StatePersistence.Persisted)]
     internal class OrchestrationActor : Actor, IOrchestrationActor
     {
+
+        private List<Cell> cells;
+
+        public Task BigBang()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetCellState(Cell cell)
+        {
+            return new Task(() =>
+            {
+                // Search list for given cell.
+                //cells.Where<Cell>(x => x.
+                // TODO: If found, update cell.
+
+                // If not found add cell update to list.
+
+                cells.Add(cell);
+            });
+        }
+
         /// <summary>
         /// This method is called whenever an actor is activated.
         /// An actor is activated the first time any of its methods are invoked.
@@ -57,5 +80,7 @@ namespace OrchestrationActor
             // The update function here verifies that the incoming count is greater than the current count to preserve order.
             return this.StateManager.AddOrUpdateStateAsync("count", count, (key, value) => count > value ? count : value);
         }
+
+
     }
 }

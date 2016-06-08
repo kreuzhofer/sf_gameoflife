@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Actors;
+using GameOfLifeModel;
 
 namespace OrchestrationActor.Interfaces
 {
@@ -25,5 +26,17 @@ namespace OrchestrationActor.Interfaces
         /// <param name="count"></param>
         /// <returns></returns>
         Task SetCountAsync(int count);
+
+        /// <summary>
+        /// Communicate cell state to orchestration service.
+        /// </summary>
+        /// <param name="cell">Cell which state has changed.</param>
+        Task SetCellState(Cell cell);
+
+        /// <summary>
+        /// Initialize the game. Create first cells which are alive.
+        /// </summary>
+        /// <returns></returns>
+        Task BigBang();
     }
 }

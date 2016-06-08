@@ -85,8 +85,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GameOfLifeModel\GameOfLifeModel.csproj">
+      <Project>{adde7487-10cc-427b-857e-44110d564e97}</Project>
+      <Name>GameOfLifeModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OrchestrationActor.Interfaces\OrchestrationActor.Interfaces.csproj">
-      <Project>{59BB702C-B796-4378-8178-B9D37F708674}</Project>
+      <Project>{59bb702c-b796-4378-8178-b9d37f708674}</Project>
       <Name>OrchestrationActor.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
