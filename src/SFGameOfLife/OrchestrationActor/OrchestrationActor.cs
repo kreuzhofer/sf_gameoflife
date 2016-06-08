@@ -25,22 +25,20 @@ namespace OrchestrationActor
     internal class OrchestrationActor : Actor, IOrchestrationActor
     {
 
-        private List<Cell> cells;
+        private List<Cell> cells = new List<Cell>();
 
-        public Task BigBang()
+        public async Task BigBang()
         {
-            return new Task(() =>
-            {
-                Random random = new Random(DateTime.Now.Millisecond);
+               Random random = new Random(DateTime.Now.Millisecond);
 
                 for (int i = 0; i < 3; i++)
                 {
                     for (int j = 0; j < 3; j++)
                     {
-                        CreateCellActor(i, j, (CellState)random.Next(0, 2));
+                        await CreateCellActor(i, j, (CellState)random.Next(0, 2));
                     }
                 }
-            });
+      
         }
 
         private Task CreateCellActor(int x, int y, CellState cellState)
@@ -49,7 +47,7 @@ namespace OrchestrationActor
             ActorId actorId = new ActorId($"cell_{x}_{y}");
 
             // This only creates a proxy object, it does not activate an actor or invoke any methods yet.
-            ICellActor cellActor = ActorProxy.Create<ICellActor>(actorId, new Uri("fabric:/SFGameOfLife"));
+            ICellActor cellActor = ActorProxy.Create<ICellActor>(actorId, new Uri("fabric:/SFGameOfLife/CellActorService"));
 
             // This will invoke a method on the actor. If an actor with the given ID does not exist, it will be activated by this method call.
             return cellActor.GetAlive(x, y);
