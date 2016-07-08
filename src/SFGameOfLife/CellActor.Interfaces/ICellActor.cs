@@ -15,19 +15,6 @@ namespace CellActor.Interfaces
     public interface ICellActor : IActor
     {
         /// <summary>
-        /// TODO: Replace with your own actor method.
-        /// </summary>
-        /// <returns></returns>
-        Task<int> GetCountAsync();
-
-        /// <summary>
-        /// TODO: Replace with your own actor method.
-        /// </summary>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        Task SetCountAsync(int count);
-
-        /// <summary>
         /// This is for giving life: the state of the cell with the given coordinates (x,y) is set to ALIVE,
         /// the state manager is told about the changes for this cell, and all neighbours of this cell are 
         /// informed about the new life. 
