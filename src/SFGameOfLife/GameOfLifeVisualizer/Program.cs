@@ -32,6 +32,7 @@ namespace GameOfLifeVisualizer
             {
                 client.BaseAddress = new Uri(baseAddress);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.Timeout = TimeSpan.FromMinutes(10);
 
                 // init the game
                 var result= await client.GetAsync($"cells/1?xsize={xsize}&ysize={ysize}");
