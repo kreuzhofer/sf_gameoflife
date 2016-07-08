@@ -64,17 +64,61 @@ namespace OrchestrationActor
 
         public async Task<List<int>> GetCellStates()
         {
-            var result = new List<int>();
+            var status = new List<int>();
+
+            //for (int j = 0; j < _ysize; j++)
+            //{
+            //    for (int i = 0; i < _xsize; i++)
+            //    {
+            //        var cellActor = GetCellActor(i, j);
+            //        var state = await cellActor.GetState();
+            //        status.Add(state);
+            //    }
+            //}
+
             for (int j = 0; j < _ysize; j++)
             {
                 for (int i = 0; i < _xsize; i++)
                 {
-                    var cellActor = GetCellActor(i, j);
-                    var state = await cellActor.GetState();
-                    result.Add(state);
+                    var neighbourCoords = GetNeighbourCoords(i, j);
+                    var neighbourStates = new List<int>();
+                    foreach (var coord in neighbourCoords)
+                    {
+                        int state;
+                        if (coord.Key < 0 || coord.Value < 0 || coord.Key >= _xsize || coord.Value >= _ysize)
+                        {
+                            state = 0;
+                        }
+                        else
+                        {
+                            var cellActor = GetCellActor(coord.Key, coord.Value);
+                            state = await cellActor.GetState();
+                        }
+
+                        neighbourStates.Add(state);
+                    }
+                    var myCellActor = GetCellActor(i, j);
+                    var newStatus = await myCellActor.ComputeNewState(neighbourStates);
+                    status.Add(newStatus);
                 }
             }
-            return result;
+
+            return status;
+        }
+        public KeyValuePair<int, int>[] GetNeighbourCoords(int X, int Y)
+        {
+            List<KeyValuePair<int, int>> result = new List<KeyValuePair<int, int>>();
+            result.Add(new KeyValuePair<int, int>(X + 1, Y));
+            result.Add(new KeyValuePair<int, int>(X + 1, Y + 1));
+            result.Add(new KeyValuePair<int, int>(X, Y + 1));
+            result.Add(new KeyValuePair<int, int>(X - 1, Y + 1));
+            result.Add(new KeyValuePair<int, int>(X - 1, Y));
+            result.Add(new KeyValuePair<int, int>(X - 1, Y - 1));
+            result.Add(new KeyValuePair<int, int>(X, Y - 1));
+            result.Add(new KeyValuePair<int, int>(X + 1, Y - 1));
+
+            //TODO Loop over the array and fix the boundary overflow problem
+            return result.ToArray();
         }
 
         /// <summary>
