@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,8 +28,9 @@ namespace OrchestrationActor
         private int _ysize;
         private int _xsize;
 
-        public async Task BigBang(int xsize, int ysize)
+        public async Task<TimeSpan> BigBang(int xsize, int ysize)
         {
+            Stopwatch watch = Stopwatch.StartNew();
             this._xsize = xsize;
             this._ysize = ysize;
             Random random = new Random(DateTime.Now.Millisecond);
@@ -40,6 +42,7 @@ namespace OrchestrationActor
                     await CreateCellActor(i, j, (CellState)random.Next(0, 1));
                 }
             }
+            return watch.Elapsed;
         }
 
         private Task CreateCellActor(int x, int y, CellState cellState)
@@ -62,9 +65,9 @@ namespace OrchestrationActor
         public async Task<List<int>> GetCellStates()
         {
             var result = new List<int>();
-            for (int j = 0; j < _xsize; j++)
+            for (int j = 0; j < _ysize; j++)
             {
-                for (int i = 0; i < _ysize; i++)
+                for (int i = 0; i < _xsize; i++)
                 {
                     var cellActor = GetCellActor(i, j);
                     var state = await cellActor.GetState();

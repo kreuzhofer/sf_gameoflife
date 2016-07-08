@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using GameOfLifeModel;
 using Microsoft.ServiceFabric.Actors;
@@ -19,12 +20,11 @@ namespace GameOfLifeAPI.Controllers
         }
 
         // GET api/cells/5 
-        public async void Get(int id, [FromUri] int xsize, [FromUri] int ysize)
+        public Task<TimeSpan> Get(int id, [FromUri] int xsize, [FromUri] int ysize)
         {
             var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(new ActorId("god"), "fabric:/SFGameOfLife");
 
-            await orchestrationActor.BigBang(xsize, ysize);
-
+            return orchestrationActor.BigBang(xsize, ysize);
         }
 
         // PUT api/cells/5 

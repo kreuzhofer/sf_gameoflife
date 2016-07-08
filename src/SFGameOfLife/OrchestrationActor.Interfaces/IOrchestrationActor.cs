@@ -18,7 +18,7 @@ namespace OrchestrationActor.Interfaces
         /// Initialize the game. Create first cells which are alive.
         /// </summary>
         /// <returns></returns>
-        Task BigBang(int xsize, int ysize);
+        Task<TimeSpan> BigBang(int xsize, int ysize);
 
         /// <summary>
         /// Get the state of all cells.

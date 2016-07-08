@@ -34,7 +34,12 @@ namespace GameOfLifeVisualizer
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 // init the game
-                await client.GetAsync($"cells/1?xsize={xsize}&ysize={ysize}");
+                var result= await client.GetAsync($"cells/1?xsize={xsize}&ysize={ysize}");
+                if (result.IsSuccessStatusCode)
+                {
+                    var timeToInit = JsonConvert.DeserializeObject<TimeSpan>(await result.Content.ReadAsStringAsync());
+                    Console.WriteLine($"Time to init: {timeToInit}");
+                }
 
                 bool abort = false;
 
@@ -48,7 +53,6 @@ namespace GameOfLifeVisualizer
                         Console.Clear();
                         Console.WriteLine(DateTime.Now.ToString());
                         var resp = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine(resp);
                         var cellList = (List<int>)JsonConvert.DeserializeObject<List<int>>(resp);
                         if (cellList.Count < xsize*ysize)
                         {
