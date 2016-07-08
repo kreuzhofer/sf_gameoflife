@@ -35,13 +35,14 @@ namespace OrchestrationActor
             this._ysize = ysize;
             Random random = new Random(DateTime.Now.Millisecond);
 
-            for (int i = 0; i < xsize; i++)
-            {
-                for (int j = 0; j < ysize; j++)
+                for (int i = 0; i < 3; i++)
                 {
-                    await CreateCellActor(i, j, (CellState)random.Next(0, 2));
+                    for (int j = 0; j < 3; j++)
+                    {
+                        await CreateCellActor(i, j, (CellState)random.Next(0, 2));
+                    }
                 }
-            }
+      
         }
 
         private Task CreateCellActor(int x, int y, CellState cellState)
