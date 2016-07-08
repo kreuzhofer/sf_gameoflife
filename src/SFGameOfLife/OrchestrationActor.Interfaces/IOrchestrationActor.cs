@@ -15,25 +15,6 @@ namespace OrchestrationActor.Interfaces
     public interface IOrchestrationActor : IActor
     {
         /// <summary>
-        /// TODO: Replace with your own actor method.
-        /// </summary>
-        /// <returns></returns>
-        Task<int> GetCountAsync();
-
-        /// <summary>
-        /// TODO: Replace with your own actor method.
-        /// </summary>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        Task SetCountAsync(int count);
-
-        /// <summary>
-        /// Communicate cell state to orchestration service.
-        /// </summary>
-        /// <param name="cell">Cell which state has changed.</param>
-        Task SetCellState(Cell cell);
-
-        /// <summary>
         /// Initialize the game. Create first cells which are alive.
         /// </summary>
         /// <returns></returns>

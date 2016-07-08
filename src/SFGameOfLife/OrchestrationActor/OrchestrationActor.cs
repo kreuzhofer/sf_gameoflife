@@ -24,8 +24,6 @@ namespace OrchestrationActor
     [StatePersistence(StatePersistence.Persisted)]
     internal class OrchestrationActor : Actor, IOrchestrationActor
     {
-
-        private List<Cell> cells = new List<Cell>();
         private int _ysize;
         private int _xsize;
 
@@ -35,9 +33,9 @@ namespace OrchestrationActor
             this._ysize = ysize;
             Random random = new Random(DateTime.Now.Millisecond);
 
-            for (int i = 0; i < _xsize; i++)
+            for (int j = 0; j < _ysize; j++)
             {
-                for (int j = 0; j < _ysize; j++)
+                for (int i = 0; i < _xsize; i++)
                 {
                     await CreateCellActor(i, j, (CellState)random.Next(0, 1));
                 }
@@ -46,45 +44,40 @@ namespace OrchestrationActor
 
         private Task CreateCellActor(int x, int y, CellState cellState)
         {
-            // Create a randomly distributed actor ID
-            ActorId actorId = new ActorId($"cell_{x}_{y}");
-
-            // This only creates a proxy object, it does not activate an actor or invoke any methods yet.
-            ICellActor cellActor = ActorProxy.Create<ICellActor>(actorId, new Uri("fabric:/SFGameOfLife/CellActorService"));
+            var cellActor = GetCellActor(x, y);
 
             // This will invoke a method on the actor. If an actor with the given ID does not exist, it will be activated by this method call.
             return cellActor.GetAlive(x, y, cellState);
         }
 
-        public Task SetCellState(Cell cell)
+        private static ICellActor GetCellActor(int x, int y)
         {
-            return new Task(() =>
-            {
-                // Search list for given cell.
-                var cellToUpdate = cells.FirstOrDefault<Cell>(i => i.X == cell.X && i.Y == cell.Y);
+            ActorId actorId = new ActorId($"cell_{x}_{y}");
 
-                if (cellToUpdate != null)
-                {
-                    cellToUpdate.State = cell.State;
-                }
-                else
-                {
-                    // If not found add cell update to list.
-                    cells.Add(cell);
-                }
-            });
+            // This only creates a proxy object, it does not activate an actor or invoke any methods yet.
+            ICellActor cellActor = ActorProxy.Create<ICellActor>(actorId, new Uri("fabric:/SFGameOfLife/CellActorService"));
+            return cellActor;
         }
 
         public async Task<List<Cell>> GetCellStates()
         {
-            return cells;
+            var result = new List<Cell>();
+            for (int j = 0; j < _xsize; j++)
+            {
+                for (int i = 0; i < _ysize; i++)
+                {
+                    var cellActor = GetCellActor(i, j);
+                    var state = await cellActor.GetState();
+                    result.Add(state);
+                }
+            }
         }
 
         /// <summary>
         /// This method is called whenever an actor is activated.
         /// An actor is activated the first time any of its methods are invoked.
         /// </summary>
-        protected override Task OnActivateAsync()
+        protected override async Task OnActivateAsync()
         {
             ActorEventSource.Current.ActorMessage(this, "Actor activated.");
 
@@ -93,30 +86,7 @@ namespace OrchestrationActor
             // Any serializable object can be saved in the StateManager.
             // For more information, see http://aka.ms/servicefabricactorsstateserialization
 
-            return this.StateManager.TryAddStateAsync("count", 0);
+            //return this.StateManager.TryAddStateAsync("count", 0);
         }
-
-        /// <summary>
-        /// TODO: Replace with your own actor method.
-        /// </summary>
-        /// <returns></returns>
-        Task<int> IOrchestrationActor.GetCountAsync()
-        {
-            return this.StateManager.GetStateAsync<int>("count");
-        }
-
-        /// <summary>
-        /// TODO: Replace with your own actor method.
-        /// </summary>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        Task IOrchestrationActor.SetCountAsync(int count)
-        {
-            // Requests are not guaranteed to be processed in order nor at most once.
-            // The update function here verifies that the incoming count is greater than the current count to preserve order.
-            return this.StateManager.AddOrUpdateStateAsync("count", count, (key, value) => count > value ? count : value);
-        }
-
-
     }
 }
