@@ -66,15 +66,15 @@ namespace OrchestrationActor
         {
             var status = new List<int>();
 
-            //for (int j = 0; j < _ysize; j++)
-            //{
-            //    for (int i = 0; i < _xsize; i++)
-            //    {
-            //        var cellActor = GetCellActor(i, j);
-            //        var state = await cellActor.GetState();
-            //        status.Add(state);
-            //    }
-            //}
+            for (int j = 0; j < _ysize; j++)
+            {
+                for (int i = 0; i < _xsize; i++)
+                {
+                    var cellActor = GetCellActor(i, j);
+                    var state = await cellActor.GetState();
+                    status.Add(state);
+                }
+            }
 
             for (int j = 0; j < _ysize; j++)
             {
@@ -91,15 +91,14 @@ namespace OrchestrationActor
                         }
                         else
                         {
-                            var cellActor = GetCellActor(coord.Key, coord.Value);
-                            state = await cellActor.GetState();
+                            state = status[coord.Value*_xsize + coord.Key];
                         }
 
                         neighbourStates.Add(state);
                     }
                     var myCellActor = GetCellActor(i, j);
                     var newStatus = await myCellActor.ComputeNewState(neighbourStates);
-                    status.Add(newStatus);
+                    status[j * _xsize + i] =  newStatus;
                 }
             }
 
