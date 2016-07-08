@@ -34,12 +34,12 @@ namespace OrchestrationActor
             this._xsize = xsize;
             this._ysize = ysize;
             Random random = new Random(DateTime.Now.Millisecond);
-
+            int threshold = 30;
             for (int j = 0; j < _ysize; j++)
             {
                 for (int i = 0; i < _xsize; i++)
                 {
-                    await CreateCellActor(i, j, (CellState)(random.Next(0, 10000)%2));
+                    await CreateCellActor(i, j, (CellState)(random.Next(1, 100)<threshold ? 1 : 0));
                 }
             }
             return watch.Elapsed;

@@ -69,7 +69,6 @@ namespace GameOfLifeVisualizer
                             Console.WriteLine();
                         }
                     }
-                    Thread.Sleep(2000);
                 }
             }
         }
