@@ -14,9 +14,20 @@ namespace GameOfLifeVisualizer
 {
     class Program
     {
+        private const int xsize = 100;
+        private const int ysize = 100;
+        private const string baseAddress = "http://localhost:8128/api/";
+
         static void Main(string[] args)
         {
-            Task t = new Task(GetCellsFromService);
+            // init game matrix
+            using (var client = new HttpClient())
+            {
+                
+            }
+
+
+                Task t = new Task(GetCellsFromService);
             t.Start();
             Console.WriteLine("Getting cell states...");
             Console.ReadLine();
@@ -26,7 +37,7 @@ namespace GameOfLifeVisualizer
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:8128/api/");
+                client.BaseAddress = new Uri(baseAddress);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 bool abort = false;

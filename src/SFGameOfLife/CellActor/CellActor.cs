@@ -97,7 +97,7 @@ namespace CellActor
                 ActorCell.State = CellState.Alive;
             }
             await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
-            await NotifyNeighboursAsync(CellState.Alive, true);
+            //await NotifyNeighboursAsync(CellState.Alive, true);
             LogStatus();
         }
 

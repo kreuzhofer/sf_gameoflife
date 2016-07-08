@@ -26,24 +26,17 @@ namespace GameOfLifeAPI.Controllers
             //};
 
             var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(new ActorId("god"), "fabric:/SFGameOfLife");
-            return await orchestrationActor.GetCellStates();
-    }
-
-        // GET api/cells/5 
-        public async void Get(int id)
-        {
-            var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(new ActorId("god"), "fabric:/SFGameOfLife");
-
-            await orchestrationActor.BigBang();
-
+            var result = await orchestrationActor.GetCellStates();
+            return result;
         }
 
-        // POST api/cells 
-        public async void Post([FromBody]string value)
+        // GET api/cells/5 
+        public async void Get(int id, [FromUri] int xsize, [FromUri] int ysize)
         {
             var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(new ActorId("god"), "fabric:/SFGameOfLife");
 
-            await orchestrationActor.BigBang();
+            await orchestrationActor.BigBang(xsize, ysize);
+
         }
 
         // PUT api/cells/5 
