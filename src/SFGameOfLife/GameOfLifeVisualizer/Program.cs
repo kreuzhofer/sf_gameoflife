@@ -14,20 +14,13 @@ namespace GameOfLifeVisualizer
 {
     class Program
     {
-        private const int xsize = 100;
-        private const int ysize = 100;
+        private const int xsize = 80;
+        private const int ysize = 20;
         private const string baseAddress = "http://localhost:8128/api/";
 
         static void Main(string[] args)
         {
-            // init game matrix
-            using (var client = new HttpClient())
-            {
-                
-            }
-
-
-                Task t = new Task(GetCellsFromService);
+            Task t = new Task(GetCellsFromService);
             t.Start();
             Console.WriteLine("Getting cell states...");
             Console.ReadLine();
@@ -39,6 +32,9 @@ namespace GameOfLifeVisualizer
             {
                 client.BaseAddress = new Uri(baseAddress);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // init the game
+                await client.GetAsync($"cells/1?xsize={xsize}&ysize={ysize}");
 
                 bool abort = false;
 
@@ -53,6 +49,14 @@ namespace GameOfLifeVisualizer
                         var resp = await response.Content.ReadAsStringAsync();
                         Console.WriteLine(resp);
                         var cellList = (List<Cell>)JsonConvert.DeserializeObject<List<Cell>>(resp);
+                        for (int j = 0; j < ysize; j++)
+                        {
+                            for (int i = 0; i < xsize; i++)
+                            {
+                                Console.Write(cellList[j*xsize+i].State == CellState.Alive ? "X" : "_");
+                            }
+                            Console.WriteLine();
+                        }
                         foreach (var item in cellList)
                         {
                             Console.WriteLine($"X:{item.X}, Y:{item.Y}, {item.State}");

@@ -24,8 +24,6 @@ namespace OrchestrationActor
     [StatePersistence(StatePersistence.Persisted)]
     internal class OrchestrationActor : Actor, IOrchestrationActor
     {
-
-        private List<Cell> cells = new List<Cell>();
         private int _ysize;
         private int _xsize;
 
@@ -56,25 +54,6 @@ namespace OrchestrationActor
             return cellActor.GetAlive(x, y);
         }
 
-        public Task SetCellState(Cell cell)
-        {
-            return new Task(() =>
-            {
-                // Search list for given cell.
-                var cellToUpdate = cells.FirstOrDefault<Cell>(i => i.X == cell.X && i.Y == cell.Y);
-
-                if (cellToUpdate != null)
-                {
-                    cellToUpdate.State = cell.State;
-                }
-                else
-                {
-                    // If not found add cell update to list.
-                    cells.Add(cell);
-                }
-            });
-        }
-
         public async Task<List<Cell>> GetCellStates()
         {
             return cells;
@@ -84,7 +63,7 @@ namespace OrchestrationActor
         /// This method is called whenever an actor is activated.
         /// An actor is activated the first time any of its methods are invoked.
         /// </summary>
-        protected override Task OnActivateAsync()
+        protected override async Task OnActivateAsync()
         {
             ActorEventSource.Current.ActorMessage(this, "Actor activated.");
 
@@ -93,30 +72,7 @@ namespace OrchestrationActor
             // Any serializable object can be saved in the StateManager.
             // For more information, see http://aka.ms/servicefabricactorsstateserialization
 
-            return this.StateManager.TryAddStateAsync("count", 0);
+            //return this.StateManager.TryAddStateAsync("count", 0);
         }
-
-        /// <summary>
-        /// TODO: Replace with your own actor method.
-        /// </summary>
-        /// <returns></returns>
-        Task<int> IOrchestrationActor.GetCountAsync()
-        {
-            return this.StateManager.GetStateAsync<int>("count");
-        }
-
-        /// <summary>
-        /// TODO: Replace with your own actor method.
-        /// </summary>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        Task IOrchestrationActor.SetCountAsync(int count)
-        {
-            // Requests are not guaranteed to be processed in order nor at most once.
-            // The update function here verifies that the incoming count is greater than the current count to preserve order.
-            return this.StateManager.AddOrUpdateStateAsync("count", count, (key, value) => count > value ? count : value);
-        }
-
-
     }
 }

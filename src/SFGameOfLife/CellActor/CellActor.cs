@@ -70,10 +70,6 @@ namespace CellActor
         {
             // Log the status for this actor
             Debug.WriteLine("cell_{0}_{1}: {2} nc:{3}", ActorCell.X, ActorCell.Y, ActorCell.State, ActorCell.AliveNeighbourCounter);
-
-            var id = new ActorId(String.Format("god"));
-            var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(id, new Uri("fabric:/SFGameOfLife/OrchestrationActorService"));
-            var task = orchestrationActor.SetCellState(ActorCell);
         }
 
         public CellState GetCellStatus()
