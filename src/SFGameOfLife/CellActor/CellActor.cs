@@ -64,12 +64,11 @@ namespace CellActor
         }
 
         /// <summary>
-        /// Logs the actor state to the orchestration actor.
+        /// Logs the actor coordinates and it's state to the orchestration actor.
         /// </summary>
         public void LogStatus()
         {
-            // Log the status for this actor
-            Debug.WriteLine("cell_{0}_{1}: {2} nc:{3}", ActorCell.X, ActorCell.Y, ActorCell.State, ActorCell.AliveNeighbourCounter);
+            Debug.WriteLine($"cell_{ActorCell.X}_{ActorCell.Y}: {ActorCell.State}"); 
         }
 
         public CellState GetCellStatus()
@@ -77,9 +76,18 @@ namespace CellActor
             return ActorCell.State;
         }
 
-        public async Task GetAlive(int x, int y)
+        public async Task GetAlive(int x, int y, CellState cellState)
         {
-            if (ActorCell == null)
+            ActorCell = new Cell
+            {
+                State = cellState,
+                X = x,
+                Y = y
+            };
+            await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
+            LogStatus();
+
+            /*if (ActorCell == null)
             {
                 ActorCell = new Cell
                 {
@@ -95,9 +103,29 @@ namespace CellActor
             await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
             //await NotifyNeighboursAsync(CellState.Alive, true);
             LogStatus();
+            }*/
         }
 
-        private async Task NotifyNeighboursAsync(CellState state, bool getAliveCall)
+        public async Task<int> ComputeNewState(List<int> neighbourStates)
+        {
+            int sum = neighbourStates.Sum(x => Convert.ToInt32(x));
+
+            if (sum >= Rules.UpperAliveNeighboursForDeath || sum <= Rules.LowerAliveNeighboursForDeath)
+            {
+                ActorCell.State = CellState.Dead;
+            }
+            LogStatus();
+
+            //TODO: brauchen wir das noch?
+            await StateManager.TryAddStateAsync("cellstate", ActorCell);
+
+            return (int)ActorCell.State;
+        }
+        
+
+
+
+        /*private async Task NotifyNeighboursAsync(CellState state, bool getAliveCall)
         {
             var neighbourcoords = ActorCell.GetNeighbourCoords();
             foreach (var coord in neighbourcoords)
@@ -114,9 +142,9 @@ namespace CellActor
                     // cyclic calls are not allowed
                 }
             }
-        }
+        }*/
 
-        public async Task NeighbourStateChanged(int x, int y, CellState newstate, bool getAliveCall)
+        /*public async Task NeighbourStateChanged(int x, int y, CellState newstate, bool getAliveCall)
         {
             //Cell was dead: create a new one in Prelive State
             if (ActorCell == null)
@@ -168,6 +196,6 @@ namespace CellActor
             {
                 await this.StateManager.TryAddStateAsync("cellstate", ActorCell);
             }
-        }
+        }*/
     }
 }

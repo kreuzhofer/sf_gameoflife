@@ -37,7 +37,7 @@ namespace OrchestrationActor
             {
                 for (int j = 0; j < _ysize; j++)
                 {
-                    await CreateCellActor(i, j, (CellState)random.Next(0, 2));
+                    await CreateCellActor(i, j, (CellState)random.Next(0, 1));
                 }
             }
         }

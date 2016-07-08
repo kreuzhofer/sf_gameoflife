@@ -34,7 +34,14 @@ namespace CellActor.Interfaces
         /// </summary>
         /// <param name="x">The X-Coordinate of the cell that gets alive. </param>
         /// <param name="y">The Y-Coordinate of the cell that gets alive.</param>
-        Task GetAlive(int x, int y);
+        Task GetAlive(int x, int y, CellState cellState);
+
+        /// <summary>
+        /// This method get's the states of all neighbour cells and computes it's own state, set's it and returns it.
+        /// </summary>
+        /// <param name="neighbourStates">All states of the neighbours of one cell (8). If the cell is at the edge of the game matrix, it gets dead states of the non-existing cells.</param>
+        /// <returns></returns>
+        Task<int> ComputeNewState(List<int> neighbourStates);
 
 
         /// <summary>
@@ -54,6 +61,6 @@ namespace CellActor.Interfaces
         /// <param name="getAliveCall">True: this method is called from a cell that was spawened via getAlive().
         ///                            False: this method is called from a cell that changed it's state. </param>
         /// <returns></returns>
-        Task NeighbourStateChanged(int x, int y, CellState newstate, bool getAliveCall);
+        //Task NeighbourStateChanged(int x, int y, CellState newstate, bool getAliveCall);
     }
 }
