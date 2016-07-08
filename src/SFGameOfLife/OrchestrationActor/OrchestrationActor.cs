@@ -26,18 +26,22 @@ namespace OrchestrationActor
     {
 
         private List<Cell> cells = new List<Cell>();
+        private int _ysize;
+        private int _xsize;
 
-        public async Task BigBang()
+        public async Task BigBang(int xsize, int ysize)
         {
-               Random random = new Random(DateTime.Now.Millisecond);
+            this._xsize = xsize;
+            this._ysize = ysize;
+            Random random = new Random(DateTime.Now.Millisecond);
 
-                for (int i = 0; i < 3; i++)
+            for (int i = 0; i < xsize; i++)
+            {
+                for (int j = 0; j < ysize; j++)
                 {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        await CreateCellActor(i, j, (CellState)random.Next(0, 2));
-                    }
+                    await CreateCellActor(i, j, (CellState)random.Next(0, 2));
                 }
+            }
         }
 
         private Task CreateCellActor(int x, int y, CellState cellState)
@@ -71,7 +75,8 @@ namespace OrchestrationActor
             });
         }
 
-        public async Task<List<Cell>> GetCellStates() {
+        public async Task<List<Cell>> GetCellStates()
+        {
             return cells;
         }
 
