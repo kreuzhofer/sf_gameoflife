@@ -33,9 +33,9 @@ namespace OrchestrationActor
             this._ysize = ysize;
             Random random = new Random(DateTime.Now.Millisecond);
 
-            for (int i = 0; i < _xsize; i++)
+            for (int j = 0; j < _ysize; j++)
             {
-                for (int j = 0; j < _ysize; j++)
+                for (int i = 0; i < _xsize; i++)
                 {
                     await CreateCellActor(i, j, (CellState)random.Next(0, 1));
                 }
@@ -47,7 +47,7 @@ namespace OrchestrationActor
             var cellActor = GetCellActor(x, y);
 
             // This will invoke a method on the actor. If an actor with the given ID does not exist, it will be activated by this method call.
-            return cellActor.GetAlive(x, y);
+            return cellActor.GetAlive(x, y, cellState);
         }
 
         private static ICellActor GetCellActor(int x, int y)
@@ -62,12 +62,13 @@ namespace OrchestrationActor
         public async Task<List<Cell>> GetCellStates()
         {
             var result = new List<Cell>();
-            for (int i = 0; i < _xsize; i++)
+            for (int j = 0; j < _xsize; j++)
             {
-                for (int j = 0; j < _ysize; j++)
+                for (int i = 0; i < _ysize; i++)
                 {
                     var cellActor = GetCellActor(i, j);
-                    var state = 
+                    var state = await cellActor.GetState();
+                    result.Add(state);
                 }
             }
         }
