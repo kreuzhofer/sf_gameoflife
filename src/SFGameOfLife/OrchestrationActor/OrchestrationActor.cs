@@ -39,7 +39,7 @@ namespace OrchestrationActor
             {
                 for (int i = 0; i < _xsize; i++)
                 {
-                    await CreateCellActor(i, j, (CellState)random.Next(0, 1));
+                    await CreateCellActor(i, j, (CellState)(random.Next(0, 10000)%2));
                 }
             }
             return watch.Elapsed;
