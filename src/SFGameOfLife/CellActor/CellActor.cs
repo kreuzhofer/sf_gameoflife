@@ -114,16 +114,18 @@ namespace CellActor
             {
                 ActorCell.State = CellState.Dead;
             }
-            LogStatus();
-
             //TODO: brauchen wir das noch?
             await StateManager.TryAddStateAsync("cellstate", ActorCell);
 
+            LogStatus();
+
             return (int)ActorCell.State;
         }
-        
 
-
+        public async Task<int> GetState()
+        {
+            return (int)ActorCell.State;
+        }
 
         /*private async Task NotifyNeighboursAsync(CellState state, bool getAliveCall)
         {

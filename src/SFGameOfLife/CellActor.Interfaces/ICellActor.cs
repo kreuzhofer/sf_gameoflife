@@ -43,6 +43,8 @@ namespace CellActor.Interfaces
         /// <returns></returns>
         Task<int> ComputeNewState(List<int> neighbourStates);
 
+        Task<int> GetState();
+
 
         /// <summary>
         /// If the state of a cell changes (e.g. from PreAlive->Life, Life->Dead) then all bordering
