@@ -35,14 +35,13 @@ namespace OrchestrationActor
             this._ysize = ysize;
             Random random = new Random(DateTime.Now.Millisecond);
 
-                for (int i = 0; i < 3; i++)
+            for (int i = 0; i < _xsize; i++)
+            {
+                for (int j = 0; j < _ysize; j++)
                 {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        await CreateCellActor(i, j, (CellState)random.Next(0, 2));
-                    }
+                    await CreateCellActor(i, j, (CellState)random.Next(0, 1));
                 }
-      
+            }
         }
 
         private Task CreateCellActor(int x, int y, CellState cellState)
@@ -54,7 +53,7 @@ namespace OrchestrationActor
             ICellActor cellActor = ActorProxy.Create<ICellActor>(actorId, new Uri("fabric:/SFGameOfLife/CellActorService"));
 
             // This will invoke a method on the actor. If an actor with the given ID does not exist, it will be activated by this method call.
-            return cellActor.GetAlive(x, y);
+            return cellActor.GetAlive(x, y, cellState);
         }
 
         public Task SetCellState(Cell cell)
