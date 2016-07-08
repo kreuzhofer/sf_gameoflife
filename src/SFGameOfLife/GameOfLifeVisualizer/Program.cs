@@ -45,10 +45,16 @@ namespace GameOfLifeVisualizer
 
                     if (response.IsSuccessStatusCode)
                     {
+                        Console.Clear();
                         Console.WriteLine(DateTime.Now.ToString());
                         var resp = await response.Content.ReadAsStringAsync();
                         Console.WriteLine(resp);
                         var cellList = (List<int>)JsonConvert.DeserializeObject<List<int>>(resp);
+                        if (cellList.Count < xsize*ysize)
+                        {
+                            Console.WriteLine("Cells not yet alive");
+                            continue;
+                        }
                         for (int j = 0; j < ysize; j++)
                         {
                             for (int i = 0; i < xsize; i++)
@@ -61,7 +67,6 @@ namespace GameOfLifeVisualizer
 
                     Thread.Sleep(2000);
 
-                    Console.Clear();
                 }
 
             }
