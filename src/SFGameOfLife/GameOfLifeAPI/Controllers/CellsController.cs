@@ -11,7 +11,7 @@ namespace GameOfLifeAPI.Controllers
     public class CellsController : ApiController
     {
         // GET api/cells 
-        public async Task<List<Cell>> Get()
+        public async Task<List<int>> Get()
         {
             var orchestrationActor = ActorProxy.Create<IOrchestrationActor>(new ActorId("god"), "fabric:/SFGameOfLife");
             var result = await orchestrationActor.GetCellStates();

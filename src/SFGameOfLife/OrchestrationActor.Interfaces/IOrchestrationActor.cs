@@ -24,6 +24,6 @@ namespace OrchestrationActor.Interfaces
         /// Get the state of all cells.
         /// </summary>
         /// <returns></returns>
-        Task<List<Cell>> GetCellStates();
+        Task<List<int>> GetCellStates();
     }
 }

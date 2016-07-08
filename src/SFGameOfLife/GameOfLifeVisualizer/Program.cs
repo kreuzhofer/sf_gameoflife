@@ -48,18 +48,14 @@ namespace GameOfLifeVisualizer
                         Console.WriteLine(DateTime.Now.ToString());
                         var resp = await response.Content.ReadAsStringAsync();
                         Console.WriteLine(resp);
-                        var cellList = (List<Cell>)JsonConvert.DeserializeObject<List<Cell>>(resp);
+                        var cellList = (List<int>)JsonConvert.DeserializeObject<List<int>>(resp);
                         for (int j = 0; j < ysize; j++)
                         {
                             for (int i = 0; i < xsize; i++)
                             {
-                                Console.Write(cellList[j*xsize+i].State == CellState.Alive ? "X" : "_");
+                                Console.Write(cellList[j*xsize+i] == (int)CellState.Alive ? "X" : "_");
                             }
                             Console.WriteLine();
-                        }
-                        foreach (var item in cellList)
-                        {
-                            Console.WriteLine($"X:{item.X}, Y:{item.Y}, {item.State}");
                         }
                     }
 

@@ -59,9 +59,9 @@ namespace OrchestrationActor
             return cellActor;
         }
 
-        public async Task<List<Cell>> GetCellStates()
+        public async Task<List<int>> GetCellStates()
         {
-            var result = new List<Cell>();
+            var result = new List<int>();
             for (int j = 0; j < _xsize; j++)
             {
                 for (int i = 0; i < _ysize; i++)
@@ -71,6 +71,7 @@ namespace OrchestrationActor
                     result.Add(state);
                 }
             }
+            return result;
         }
 
         /// <summary>
